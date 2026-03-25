@@ -54,13 +54,16 @@ if (appDiv) {
   const listeHTML = produits.map(p => `
     <div class="card">
       <h3 class="menu-container">${p.nom}</h3>
-      <p class="card">${p.description ?? 'Pas de description'}</p>
+      <p>${p.description ?? 'Pas de description'}</p>
       <p class=""><strong>${p.prix}€</strong></p>
     </div>
   `).join('');
 
     appDiv.innerHTML = `
     <h1>Eatsmart - Carte du réstaurant (${produits.length} plats)</h1>
+    <header class="menu-container">
     ${listeHTML}
+    </header>
   `;
 }
+
