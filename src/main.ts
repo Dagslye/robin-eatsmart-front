@@ -1,55 +1,31 @@
-import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.ts'
+import './style.css' 
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
-// Fichier main.ts
-import './style.css'
-interface Plat {
+interface Plat { // Sert a savoir quoi prendre des Plat , et comment les afficher
   id: number;
   nom: string;
   prix: number;
   description?: string; 
 }
 
-const Pizzaanchnoi23cm: Plat = {
+const Pizzaanchnoi23cm: Plat = { //Un plat hardcodé
   id: 1,
   nom: "Pizza aux anchois, 23cm",
   prix: 12.5
 };
-  const Pizzaanchnoi33cm: Plat = {
+const Pizzaanchnoi33cm: Plat = {
   id: 1,
   nom: "Pizza aux anchois, 33cm",
   prix: 12.5
 };
-  const Pizzaemental23cm: Plat = {
+const Pizzaemental23cm: Plat = {
   id: 1,
   nom: "Pizza emental, 23cm",
   prix: 12.5
 };
 
-const appDiv = document.querySelector<HTMLDivElement>('#app');
-
+const appDiv = document.querySelector<HTMLDivElement>('#app'); //Selectione dans le html l'id app
 const produits: Plat[] = [Pizzaanchnoi23cm, Pizzaanchnoi33cm, Pizzaemental23cm];
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
 if (appDiv) {
   const listeHTML = produits.map(p => `
     <div class="card">
@@ -65,5 +41,36 @@ if (appDiv) {
     ${listeHTML}
     </header>
   `;
+
+  //-----------------------------------------------------------------------------------------------------
+  //V2
+  //-----------------------------------------------------------------------------------------------------
+
+    async function chargerDonnées(): Promise<ArticleDTO[]> {
+    const res = await fetch('https://api.eatsmart.fr/articles');
+    return await res.json();
+  }
+  interface ArticleDTO {
+    id_article: number;
+    nom: string;
+    prix: number;
+  }
+
+  async function init() { //fonction async init, pour commencer fetch bdd
+    console.log("Loading menu"); //info
+    const menuData = await chargerDonnées();
+    const appDiv = document.querySelector<HTMLDivElement>(`#app`);
+    if (appDiv) {
+      appDiv.innerHTML = menuData.map(art =>`)
+      <li> 
+        <strong>${art.nom}</strong> - ${art.nom}€
+        (Réf: ${art.id_article})
+      </li>
+    `).join('');
+    }
+  }
+  init();
+
+
 }
 
